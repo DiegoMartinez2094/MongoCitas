@@ -30,4 +30,73 @@ appUsuario.get("/:usu_id?", async (req, res) => {
 });
 
 
+appUsuario.get('/NumMatriMedico/:medico_nroMatricula', async (req, res) => {
+    const medico_nroMatricula = parseInt(req.params.medico_nroMatricula);
+
+    try {
+        let db = await con();
+        let cita = db.collection('cita');
+        let usuario = db.collection('usuario');
+
+        // Obtener el ID del médico a partir de su número de matrícula
+        const medico = await db.collection('medico').findOne({ med_nroMatriculaProfesional: medico_nroMatricula });
+
+        if (!medico) { //si el numero de matricula no existe
+            return res.status(404).send('Médico no encontrado');
+        }
+
+        // Encontrar todas las citas que tienen el ID del médico
+        const citas = await cita.find({ cit_medico: medico.med_nroMatriculaProfesional }).toArray();
+
+        const pacientesIds = citas.map(cita => cita.cit_datosUsuario);
+        
+        // Encontrar los usuarios (pacientes) correspondientes a los IDs de pacientes obtenidos
+        const pacientes = await usuario.find({ usu_id: { $in: pacientesIds } }).toArray();
+
+        res.send(pacientes);
+    } catch (error) {
+        console.error("Error:", error);
+        res.status(500).send("Error interno del servidor");
+    }
+});
+
+appUsuario.get('/consultorias/:usu_id', async (req, res) => {
+    const usu_id = parseInt(req.params.usu_id);
+
+    try {
+        let db = await con();
+        let cita = db.collection('cita');
+        let medico = db.collection('medico');
+        let consultorio = db.collection('consultorio');
+
+        const paciente = await db.collection('usuario').findOne({ usu_id });
+        if (!paciente) {
+            return res.status(404).send('Paciente no encontrado');
+        }
+
+        const pacienteCitas = await cita.find({ cit_datosUsuario: paciente.usu_id }).toArray();
+
+        if (pacienteCitas.length === 0) {
+            return res.send('El paciente no tiene consultorías programadas.');
+        }
+
+        const consultorias = [];
+
+        for (const cita of pacienteCitas) {
+            const medicoInfo = await medico.findOne({ med_nroMatriculaProfesional: cita.cit_medico });
+            
+
+            consultorias.push({
+                medico: medicoInfo,
+                cita: cita
+            });
+        }
+
+        res.send(consultorias);
+    } catch (error) {
+        console.error("Error:", error);
+        res.status(500).send("Error interno del servidor");
+    }
+});
+
 export default appUsuario;
