@@ -151,7 +151,7 @@ db.createCollection("usuario", {
   },
   {
     usu_id: 2,
-    usu_nombre: "Maria",
+    usu_nombre: "Andrea",
     usu_segundo_nombre: "Elena",
     usu_primer_apellido: "Rodriguez",
     usu_segundo_apellido: "Lopez",
