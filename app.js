@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv'
 
 import appUsuario from './routers/usuario.js';
+import appCitas from './routers/citas.js';
 
 dotenv.config();
 let app = express();        
@@ -13,4 +14,5 @@ app.listen(config, ()=>{
     console.log(`http://${config.hostname}:${config.port}`);
 });
 
-app.use("/usuario",appUsuario)
+app.use("/usuario",appUsuario);
+app.use("/cita",appCitas);
