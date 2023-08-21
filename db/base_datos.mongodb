@@ -1,0 +1,278 @@
+use("Citas");
+
+db.createCollection("usuario", {
+    validator: {
+      $jsonSchema: {
+        bsonType: "object",
+        required: [
+          "usu_id",
+          "usu_nombre",
+          "usu_segundo_nombre",
+          "usu_primer_apellido",
+          "usu_segundo_apellido",
+          "usu_telefono",
+          "usu_direccion",
+          "usu_email",
+          "usu_tipodoc",
+          "usu_genero",
+          "usu_acudiente"
+        ],
+        properties: {
+          usu_id: { bsonType: "int" },
+          usu_nombre: { bsonType: "string", maxLength: 50 },
+          usu_segundo_nombre: { bsonType: "string", maxLength: 45 },
+          usu_primer_apellido: { bsonType: "string", maxLength: 50 },
+          usu_segundo_apellido: { bsonType: "string", maxLength: 50 },
+          usu_telefono: { bsonType: "string", maxLength: 50 },
+          usu_direccion: { bsonType: "string", maxLength: 100 },
+          usu_email: { bsonType: "string", maxLength: 100 },
+          usu_tipodoc: {
+            bsonType: "object",
+            required: ["tipdoc_id", "tipdoc_nombre", "tipdoc_abreviatura"],
+            properties: {
+              tipdoc_id: { bsonType: "int" },
+              tipdoc_nombre: { bsonType: "string", maxLength: 20 },
+              tipdoc_abreviatura: { bsonType: "string", maxLength: 20 }
+            }
+          },
+          usu_genero: {
+            bsonType: "object",
+            required: ["gen_id", "gen_nombre", "gen_abreviatura"],
+            properties: {
+              gen_id: { bsonType: "int" },
+              gen_nombre: { bsonType: "string", maxLength: 20 },
+              gen_abreviatura: { bsonType: "string", maxLength: 20 }
+            }
+          },
+          usu_acudiente: {
+            bsonType: "object",
+            required: ["acu_codigo", "acu_nombreCompleto", "acu_telefono", "acu_direccion"],
+            properties: {
+              acu_codigo: { bsonType: "int" },
+              acu_nombreCompleto: { bsonType: "string", maxLength: 100 },
+              acu_telefono: { bsonType: "string", maxLength: 100 },
+              acu_direccion: { bsonType: "string", maxLength: 200 }
+            }
+          }
+        }
+      }
+    }
+  })
+   
+  db.createCollection("medico", {
+    validator: {
+      $jsonSchema: {
+        bsonType: "object",
+        required: [
+          "med_nroMatriculaProfesional",
+          "med_nombreCompleto",
+          "med_consultorio",
+          "med_especialidad"
+        ],
+        properties: {
+          med_nroMatriculaProfesional: { bsonType: "int" },
+          med_nombreCompleto: { bsonType: "string", maxLength: 120 },
+          med_consultorio: {
+            bsonType: "object",
+            required: ["cons_codigo", "cons_nombre"],
+            properties: {
+              cons_codigo: { bsonType: "int" },
+              cons_nombre: { bsonType: "string", maxLength: 50 }
+            }
+          },
+          med_especialidad: {
+            bsonType: "object",
+            required: ["esp_id", "esp_nombre"],
+            properties: {
+              esp_id: { bsonType: "int" },
+              esp_nombre: { bsonType: "string", maxLength: 20 }
+            }
+          }
+        }
+      }
+    }
+  })
+
+  db.createCollection("cita", {
+    validator: {
+      $jsonSchema: {
+        bsonType: "object",
+        required: [
+          "cit_codigo",
+          "cit_fecha",
+          "cit_estadoCita",
+          "cit_medico",
+          "cit_datosUsuario"
+        ],
+        properties: {
+          cit_codigo: { bsonType: "int" },
+          cit_fecha: { bsonType: "date" },
+          cit_estadoCita: {
+            bsonType: "object",
+            required: ["est_cita_id", "est_cita_nombre"],
+            properties: {
+              est_cita_id: { bsonType: "int" },
+              est_cita_nombre: { bsonType: "string", maxLength: 20 }
+            }
+          },
+          cit_medico: { bsonType: "int" },
+          cit_datosUsuario: { bsonType: "int" }
+        }
+      }
+    }
+  })
+    
+  db.usuario.insertMany([
+  {
+    usu_id: 1,
+    usu_nombre: "Juan",
+    usu_segundo_nombre: "Carlos",
+    usu_primer_apellido: "Perez",
+    usu_segundo_apellido: "Gomez",
+    usu_telefono: "123456789",
+    usu_direccion: "Calle 123",
+    usu_email: "juan@example.com",
+    usu_tipodoc: {
+      tipdoc_id: 1,
+      tipdoc_nombre: "Cédula",
+      tipdoc_abreviatura: "CC"
+    },
+    usu_genero: {
+      gen_id: 1,
+      gen_nombre: "Masculino",
+      gen_abreviatura: "M"
+    },
+    usu_acudiente: {
+      acu_codigo: 2,
+      acu_nombreCompleto: "Maria Acudiente",
+      acu_telefono: "987654321",
+      acu_direccion: "Avenida Acudiente 456"
+    }
+  },
+  {
+    usu_id: 2,
+    usu_nombre: "Maria",
+    usu_segundo_nombre: "Elena",
+    usu_primer_apellido: "Rodriguez",
+    usu_segundo_apellido: "Lopez",
+    usu_telefono: "987654321",
+    usu_direccion: "Avenida 456",
+    usu_email: "maria@example.com",
+    usu_tipodoc: {
+      tipdoc_id: 2,
+      tipdoc_nombre: "Pasaporte",
+      tipdoc_abreviatura: "PAS"
+    },
+    usu_genero: {
+      gen_id: 2,
+      gen_nombre: "Femenino",
+      gen_abreviatura: "F"
+    },
+    usu_acudiente: {
+      acu_codigo: 1,
+      acu_nombreCompleto: "Juan Acudiente",
+      acu_telefono: "123456789",
+      acu_direccion: "Calle Acudiente 123"
+    }
+  },
+  {
+    usu_id: 3,
+    usu_nombre: "Pedro",
+    usu_segundo_nombre: "Antonio",
+    usu_primer_apellido: "Lopez",
+    usu_segundo_apellido: "Gomez",
+    usu_telefono: "555555555",
+    usu_direccion: "Calle Principal",
+    usu_email: "pedro@example.com",
+    usu_tipodoc: {
+      tipdoc_id: 1,
+      tipdoc_nombre: "Cédula",
+      tipdoc_abreviatura: "CC"
+    },
+    usu_genero: {
+      gen_id: 1,
+      gen_nombre: "Masculino",
+      gen_abreviatura: "M"
+    },
+    usu_acudiente: {
+      acu_codigo: 2,
+      acu_nombreCompleto: "Maria Acudiente",
+      acu_telefono: "987654321",
+      acu_direccion: "Avenida Acudiente 456"
+    }
+  }
+]);
+
+db.medico.insertMany( [
+    {
+      med_nroMatriculaProfesional: 12345,
+      med_nombreCompleto: "Dr. Pérez",
+      med_consultorio: {
+        cons_codigo: 1,
+        cons_nombre: "Consultorio A"
+      },
+      med_especialidad: {
+        esp_id: 1,
+        esp_nombre: "Pediatría"
+      }
+    },
+    {
+      med_nroMatriculaProfesional: 67890,
+      med_nombreCompleto: "Dra. Martínez",
+      med_consultorio: {
+        cons_codigo: 2,
+        cons_nombre: "Consultorio B"
+      },
+      med_especialidad: {
+        esp_id: 2,
+        esp_nombre: "Ginecología"
+      }
+    },
+    {
+      med_nroMatriculaProfesional: 54321,
+      med_nombreCompleto: "Dr. Sánchez",
+      med_consultorio: {
+        cons_codigo: 1,
+        cons_nombre: "Consultorio A"
+      },
+      med_especialidad: {
+        esp_id: 3,
+        esp_nombre: "Cardiología"
+      }
+    }
+  ]);
+  
+db.cita.insertMany([
+    {
+      cit_codigo: 1,
+      cit_fecha: ISODate("2023-08-25"),
+      cit_estadoCita: {
+        est_cita_id: 1,
+        est_cita_nombre: "Pendiente"
+      },
+      cit_medico: 12345, 
+      cit_datosUsuario: 1 
+    },
+    {
+      cit_codigo: 2,
+      cit_fecha: ISODate("2023-08-28"),
+      cit_estadoCita: {
+        est_cita_id: 2,
+        est_cita_nombre: "Confirmada"
+      },
+      cit_medico: 67890, 
+      cit_datosUsuario: 2 
+    },
+    {
+      cit_codigo: 3,
+      cit_fecha: ISODate("2023-09-01"),
+      cit_estadoCita: {
+        est_cita_id: 1,
+        est_cita_nombre: "Pendiente"
+      },
+      cit_medico: 54321,
+      cit_datosUsuario: 3 
+    }
+  ]);
+  
+
