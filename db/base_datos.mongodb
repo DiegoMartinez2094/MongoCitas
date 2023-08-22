@@ -239,6 +239,18 @@ db.medico.insertMany( [
         esp_id: 3,
         esp_nombre: "Cardiología"
       }
+    },
+    {
+      med_nroMatriculaProfesional: 1010,
+      med_nombreCompleto: "Dr. Martinez",
+      med_consultorio: {
+        cons_codigo: 1,
+        cons_nombre: "Consultorio A"
+      },
+      med_especialidad: {
+        esp_id: 3,
+        esp_nombre: "Cardiología"
+      }
     }
   ]);
   
@@ -248,13 +260,23 @@ db.cita.insertMany([
       cit_fecha: ISODate("2023-08-25"),
       cit_estadoCita: {
         est_cita_id: 1,
-        est_cita_nombre: "Pendiente"
+        est_cita_nombre: "confirmada"
       },
       cit_medico: 12345, 
       cit_datosUsuario: 1 
     },
     {
       cit_codigo: 2,
+      cit_fecha: ISODate("2023-08-25"),
+      cit_estadoCita: {
+        est_cita_id: 1,
+        est_cita_nombre: "Pendiente"
+      },
+      cit_medico: 12345, 
+      cit_datosUsuario: 1 
+    },
+    {
+      cit_codigo: 3,
       cit_fecha: ISODate("2023-08-28"),
       cit_estadoCita: {
         est_cita_id: 2,
@@ -264,7 +286,7 @@ db.cita.insertMany([
       cit_datosUsuario: 2 
     },
     {
-      cit_codigo: 3,
+      cit_codigo: 4,
       cit_fecha: ISODate("2023-09-01"),
       cit_estadoCita: {
         est_cita_id: 1,
