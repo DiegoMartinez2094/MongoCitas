@@ -60,6 +60,50 @@ appCitas.get("/citas-medico/:med_nroMatriculaProfesional/:fecha", async (req, re
     }
 });
 
+appCitas.get("/citas-por-genero/:gen_id/estado/:estado", async (req, res) => {
+    const gen_id = parseInt(req.params.gen_id);
+    const estado = req.params.estado;
+
+    try {
+        let db = await con();
+        let cita = db.collection('cita');
+        
+        let result = await cita.aggregate([
+            {
+                $lookup: {
+                    from: "usuario",
+                    localField: "cit_datosUsuario",
+                    foreignField: "usu_id",
+                    as: "usuario"
+                }
+            },
+            {
+                $match: {
+                    "usuario.usu_genero.gen_id": gen_id,
+                    "cit_estadoCita.est_cita_nombre": estado
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    cit_codigo: 1,
+                    cit_fecha: 1,
+                    cit_estadoCita: 1,
+                    cit_medico: 1,
+                    cit_datosUsuario: 1
+                }
+            }
+        ]).toArray();
+
+        res.send(result);
+    } catch (error) {
+        console.error("Error:", error);
+        res.status(500).send("Error interno del servidor");
+    }
+});
+
+
+
 
 
 export default appCitas;
