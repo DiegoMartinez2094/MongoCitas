@@ -99,4 +99,40 @@ appUsuario.get('/consultorias/:usu_id', async (req, res) => {
     }
 });
 
+appUsuario.get("/consultorios-paciente/:usu_id", async (req, res) => {
+    const usu_id = parseInt(req.params.usu_id);
+
+    try {
+        let db = await con();
+        let cita = db.collection('cita');
+        
+        let result = await cita.aggregate([
+            {
+                $match: {
+                    cit_datosUsuario: usu_id
+                }
+            },
+            {
+                $lookup: {
+                    from: "medico",
+                    localField: "cit_medico",
+                    foreignField: "med_nroMatriculaProfesional",
+                    as: "medico"
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    consultorio: "$medico.med_consultorio.cons_nombre"
+                }
+            }
+        ]).toArray();
+
+        res.send(result);
+    } catch (error) {
+        console.error("Error:", error);
+        res.status(500).send("Error interno del servidor");
+    }
+});
+
 export default appUsuario;
