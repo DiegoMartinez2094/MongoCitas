@@ -1,18 +1,23 @@
 import { con } from "../db/atlas.js";
 import { Router } from "express";
+import { limitGrt } from "../limit/config.js";
 
 const appCitas = Router();
 let db = await con();
 let cita = db.collection("cita");
 
-appCitas.get("/", async (req, res) => {
+appCitas.get("/",limitGrt(), async (req, res) => {
+  if(!req.rateLimit) return; 
+  console.log(req.rateLimit);
   let db = await con();
   let cita = db.collection("cita");
   let result = await cita.find().sort({ cit_codigo: 1 }).toArray();
   res.send(result);
 });
 
-appCitas.get("/fecha/:cit_fecha", async (req, res) => {
+appCitas.get("/fecha/:cit_fecha",limitGrt(), async (req, res) => {
+    if(!req.rateLimit) return; 
+    console.log(req.rateLimit);
     const cit_fecha = req.params.cit_fecha;
 
     try {
@@ -30,7 +35,9 @@ appCitas.get("/fecha/:cit_fecha", async (req, res) => {
     }
 });
 
-appCitas.get("/citas-medico/:med_nroMatriculaProfesional/:fecha", async (req, res) => {
+appCitas.get("/citas-medico/:med_nroMatriculaProfesional/:fecha",limitGrt(), async (req, res) => {
+    if(!req.rateLimit) return; 
+    console.log(req.rateLimit);
     const med_nroMatriculaProfesional = parseInt(req.params.med_nroMatriculaProfesional);
     const fecha = new Date(req.params.fecha);
 
@@ -60,7 +67,9 @@ appCitas.get("/citas-medico/:med_nroMatriculaProfesional/:fecha", async (req, re
     }
 });
 
-appCitas.get("/citas-por-genero/:gen_id/estado/:estado", async (req, res) => {
+appCitas.get("/citas-por-genero/:gen_id/estado/:estado",limitGrt(), async (req, res) => {
+    if(!req.rateLimit) return; 
+    console.log(req.rateLimit);
     const gen_id = parseInt(req.params.gen_id);
     const estado = req.params.estado;
 
@@ -102,7 +111,9 @@ appCitas.get("/citas-por-genero/:gen_id/estado/:estado", async (req, res) => {
     }
 });
 
-appCitas.get("/citas-rechazadas/:estado/:mes", async (req, res) => {
+appCitas.get("/citas-rechazadas/:estado/:mes",limitGrt(), async (req, res) => {
+    if(!req.rateLimit) return; 
+    console.log(req.rateLimit);
     const estado = req.params.estado;
     const mes = parseInt(req.params.mes);
 
