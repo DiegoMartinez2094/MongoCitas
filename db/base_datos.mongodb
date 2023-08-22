@@ -255,45 +255,21 @@ db.medico.insertMany( [
   ]);
   
 db.cita.insertMany([
-    {
-      cit_codigo: 1,
-      cit_fecha: ISODate("2023-08-25"),
-      cit_estadoCita: {
-        est_cita_id: 1,
-        est_cita_nombre: "confirmada"
-      },
-      cit_medico: 12345, 
-      cit_datosUsuario: 1 
+    {cit_codigo: 1, cit_fecha: ISODate("2023-08-25"),
+      cit_estadoCita: {est_cita_id: 2,est_cita_nombre: "Rechazada"},
+      cit_medico: 12345, cit_datosUsuario: 1 },
+
+    {cit_codigo: 2,cit_fecha: ISODate("2023-08-25"),
+    cit_estadoCita: {est_cita_id: 1, est_cita_nombre: "Atendida"},
+    cit_medico: 67890, cit_datosUsuario: 1},
+
+    {cit_codigo: 3, cit_fecha: ISODate("2023-08-28"),
+     cit_estadoCita: {est_cita_id: 2, est_cita_nombre: "Rechazada"},
+      cit_medico: 67890, cit_datosUsuario: 2 
     },
-    {
-      cit_codigo: 2,
-      cit_fecha: ISODate("2023-08-25"),
-      cit_estadoCita: {
-        est_cita_id: 1,
-        est_cita_nombre: "Pendiente"
-      },
-      cit_medico: 12345, 
-      cit_datosUsuario: 1 
-    },
-    {
-      cit_codigo: 3,
-      cit_fecha: ISODate("2023-08-28"),
-      cit_estadoCita: {
-        est_cita_id: 2,
-        est_cita_nombre: "Confirmada"
-      },
-      cit_medico: 67890, 
-      cit_datosUsuario: 2 
-    },
-    {
-      cit_codigo: 4,
-      cit_fecha: ISODate("2023-09-01"),
-      cit_estadoCita: {
-        est_cita_id: 1,
-        est_cita_nombre: "Pendiente"
-      },
-      cit_medico: 54321,
-      cit_datosUsuario: 3 
+    {cit_codigo: 4,cit_fecha: ISODate("2023-09-01"),
+    cit_estadoCita: {est_cita_id: 1,est_cita_nombre: "Atendida"},
+      cit_medico: 54321,cit_datosUsuario: 3 
     }
   ]);
   
