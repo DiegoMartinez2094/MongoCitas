@@ -46,20 +46,87 @@ npm run dev
 
 6-con ese puerto realizamos las peticiones ejemplo:
 
-1. **Obtener todos los pacientes alfabéticamente = http://127.0.0.1:5000/usuario**
-2. **Obtener todas las citas alfabéticamente = http://127.0.0.1:5000/cita**
-3. Obtener todos los médicos de una especialidad específica (por ejemplo, **'Cardiología'**)=
+En todas las solicitudes se debe implementar un token, este token va de acuerdo al rol, en este caso está configurado de la siguiente forma en la base de datos en la coleccion roles:
+
+Nota1: el token tiene una duración de 1 minuto, se puede modificar en el archivo middlewares/middlewareJWT.js crearToken/.setExpirationTime('1m')
+Nota 2: si generamos el Token administrador: tiene acceso a todos los endpoints, para los endpoints relacionados a citas, sirve cualquier rol.
+
+si realizas una solicitud con un token que ya caducó con el tiempo, saldrá el siguiente mensaje:
+
+```
+{
+  "mensaje": "Token inválido"
+}
+```
+
+si realizas la generación del token con un rol que no existe saldrá el siguiente mensaje:
+
+```
+{
+  "mensaje": "Rol no encontrado"
+}
+```
+
+si realizamos una solicitud con un token incorrecto nos saldrá el siguiente mensaje: 
+
+```
+{
+  "mensaje": "Acceso no autorizado a la colección"
+}
+```
+
+si generamos una solicitud sin dar en los headers la Autorizacion del token nos saldrá un mensaje de la siguiente forma:
+
+```
+{
+  "mensaje": "Token no proporcionado"
+}
+```
+
+```
+
+ {
+    nombre_rol: "usuario",
+    acceso_rol: ["cita", "usuario"]
+  },
+  {
+    nombre_rol: "medico",
+    acceso_rol: ["cita", "medico"]
+  },
+  {
+    nombre_rol: "administrador",
+    acceso_rol: ["cita", "usuario", "medico"]
+  }
+```
+
+1. Obtener todos los pacientes alfabéticamente =
+   se obtiene el token por rol: http://127.10.10.10:5000/token/usuario
+   y se realiza la consulta con el siguiente endpoint:
+   http://127.0.0.1:5000/usuario/usuario
+2. Obtener todas las citas alfabéticamente = se obtiene el token por rol: http://127.10.10.10:5000/token/medico, http://127.10.10.10:5000/token/usuario
+   se pone en los headeres Authorization el token y se realiza la consulta con el siguiente endpoint: http://127.10.10.10:5000/cita/cita
+3. Obtener todos los médicos de una especialidad específica (por ejemplo, 'Cardiología')=
    se obtiene el token por rol: http://127.10.10.10:5000/token/medico
    se pone en los headeres Authorization el token y se realiza la consulta con el siguiente endpoint:
    http://127.10.10.10:5000/medico/medico/especialidad/Ginecología
-4. Encontrar la próxima cita para un paciente específico (por ejemplo, el paciente con **usu_id 1**)=
-5. Encontrar todos los pacientes que tienen citas con un médico específico (por ejemplo, el médico con **med_nroMatriculaProsional 1**)=http://127.10.10.10:5000/usuario//NumMatriMedico/12345
-6. Obtener las consultorías para un paciente específico (por ejemplo, paciente **con usu_id 1**)=http://127.10.10.10:5000/usuario/consultorias/1
-7. Encontrar todas las citas para un día específico (por ejemplo, **'2023-07-12'**)=http://127.10.10.10:5000/cita/fecha/2023-09-01
-8. **Obtener los médicos y sus consultorios =http://127.10.10.10:5000/medico/medicosYconsultorios**
-9. Contar el número de citas que un médico tiene en un día específico http://127.0.0.1:5000/cita/citas-medico/12345/2023-08-25
-10. **Obtener los consultorio donde se aplicó las citas de un paciente http://127.0.0.1:5000/usuario/consultorios-paciente/1**
-11. **Obtener todas las citas realizadas por los pacientes de un genero si su estado de la cita fue atendidad =http://127.0.0.1:5000/cita/citas-por-genero/1/estado/Atendida**
-12. Mostrar todas las citas que fueron rechazadas y en un mes específico, mostrar la fecha de la cita, el nombre del usuario y el médico.=http://127.0.0.1:5000/cita/citas-rechazadas/Rechazada/8
+4. Encontrar todos los pacientes que tienen citas con un médico específico (por ejemplo, el médico con med_nroMatriculaProsional 1)=se obtiene el token por rol: http://127.10.10.10:5000/token/usuario
+   y se realiza la consulta con el siguiente endpoint:
+   http://127.10.10.10:5000/usuario/usuario/NumMatriMedico/12345
+5. Obtener las consultorías para un paciente específico (por ejemplo, paciente con usu_id 1)=se obtiene el token por rol: http://127.10.10.10:5000/token/usuario
+   y se realiza la consulta con el siguiente endpoint:
+   http://127.10.10.10:5000/usuario/usuario/consultorias/1
+6. Encontrar todas las citas para un día específico (por ejemplo, '2023-07-12')=se obtiene el token por rol: http://127.10.10.10:5000/token/usuario, http://127.10.10.10:5000/token/medico
+   y se realiza la consulta con el siguiente endpoint: http://127.10.10.10:5000/cita/fecha/2023-09-01
+7. Obtener los médicos y sus consultorios =se obtiene el token por rol: http://127.10.10.10:5000/token/medico
+   se pone en los headeres Authorization el token y se realiza la consulta con el siguiente endpoint:http://127.10.10.10:5000/medico/medico/medicosYconsultorios
+8. Contar el número de citas que un médico tiene en un día específico= se obtiene el token por rol: http://127.10.10.10:5000/token/usuario, http://127.10.10.10:5000/token/medico
+   y se realiza la consulta con el siguiente endpoint: http://127.0.0.1:5000/cita/citas-medico/12345/2023-08-25
+9. Obtener los consultorio donde se aplicó las citas de un paciente=se obtiene el token por rol: http://127.10.10.10:5000/token/usuario
+   y se realiza la consulta con el siguiente endpoint:
+   http://127.0.0.1:5000/usuario/usuario/consultorios-paciente/1
+10. Obtener todas las citas realizadas por los pacientes de un genero si su estado de la cita fue atendidad = se obtiene el token por rol: http://127.10.10.10:5000/token/usuario, http://127.10.10.10:5000/token/medico
+    y se realiza la consulta con el siguiente endpoint: http://127.0.0.1:5000/cita/citas-por-genero/1/estado/Atendida
+11. Mostrar todas las citas que fueron rechazadas y en un mes específico, mostrar la fecha de la cita, el nombre del usuario y el médico.= se obtiene el token por rol: http://127.10.10.10:5000/token/usuario, http://127.10.10.10:5000/token/medico
+    y se realiza la consulta con el siguiente endpoint: http://127.0.0.1:5000/cita/citas-rechazadas/Rechazada/8
 
 Nota: cada solicitud tiene un limite de 5 peticiones máximo en 30 segundos.
