@@ -16,7 +16,7 @@ appCitas.get("/",limitGrt(), async (req, res) => {
   res.send(result);
 });
 
-appCitas.get("/citas/fecha/:cit_fecha",validarToken,limitGrt(), async (req, res) => {
+appCitas.get("/cita/fecha/:cit_fecha",validarToken,limitGrt(), async (req, res) => {
     if(!req.rateLimit) return; 
     console.log(req.rateLimit);
     const cit_fecha = req.params.cit_fecha;
@@ -36,7 +36,7 @@ appCitas.get("/citas/fecha/:cit_fecha",validarToken,limitGrt(), async (req, res)
     }
 });
 
-appCitas.get("/citas/citas-medico/:med_nroMatriculaProfesional/:fecha",validarToken,limitGrt(), async (req, res) => {
+appCitas.get("/cita/citas-medico/:med_nroMatriculaProfesional/:fecha",validarToken,limitGrt(), async (req, res) => {
     if(!req.rateLimit) return; 
     console.log(req.rateLimit);
     const med_nroMatriculaProfesional = parseInt(req.params.med_nroMatriculaProfesional);
@@ -68,7 +68,7 @@ appCitas.get("/citas/citas-medico/:med_nroMatriculaProfesional/:fecha",validarTo
     }
 });
 
-appCitas.get("/citas/citas-por-genero/:gen_id/estado/:estado",validarToken,limitGrt(), async (req, res) => {
+appCitas.get("/cita/citas-por-genero/:gen_id/estado/:estado",validarToken,limitGrt(), async (req, res) => {
     if(!req.rateLimit) return; 
     console.log(req.rateLimit);
     const gen_id = parseInt(req.params.gen_id);
@@ -112,7 +112,7 @@ appCitas.get("/citas/citas-por-genero/:gen_id/estado/:estado",validarToken,limit
     }
 });
 
-appCitas.get("/citas/citas-rechazadas/:estado/:mes",validarToken,limitGrt(), async (req, res) => {
+appCitas.get("/cita/citas-rechazadas/:estado/:mes",validarToken,limitGrt(), async (req, res) => {
     if(!req.rateLimit) return; 
     console.log(req.rateLimit);
     const estado = req.params.estado;
