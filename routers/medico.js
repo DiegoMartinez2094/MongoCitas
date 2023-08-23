@@ -26,7 +26,7 @@ appMedico.get("/medico/especialidad/:esp_nombre", limitGrt(),validarToken, async
   }
 });
 
-appMedico.get("/medicosYconsultorios", limitGrt(), async (req, res) => {
+appMedico.get("/medico/medicosYconsultorios",validarToken, limitGrt(), async (req, res) => {
   if (!req.rateLimit) return;
   console.log(req.rateLimit);
   try {

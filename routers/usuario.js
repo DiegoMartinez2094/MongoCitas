@@ -1,12 +1,29 @@
 import { con } from "../db/atlas.js";
 import { Router } from "express";
 import { limitGrt } from "../limit/config.js";
+import { validarToken } from '../middlewares/middlewareJWT.js';
 
 const appUsuario = Router();
 let db = await con();
 let usuario = db.collection("usuario");
 
-appUsuario.get("/:usu_id?", limitGrt(), async (req, res) => {
+appUsuario.get("/usuario", validarToken, limitGrt(), async (req, res) => {
+  if (!req.rateLimit) return;
+  console.log(req.rateLimit);
+
+  try {
+      let db = await con();
+      let usuario = db.collection("usuario");
+
+      let result = await usuario.find().sort({ usu_nombre: 1 }).toArray();
+      res.send(result);
+  } catch (error) {
+      console.error("Error:", error);
+      res.status(500).send("Error interno del servidor");
+  }
+});
+
+appUsuario.get("/usuario/:usu_id?",validarToken, limitGrt(), async (req, res) => {
   if (!req.rateLimit) return;
   console.log(req.rateLimit);
   const usu_id = req.params.usu_id ? parseInt(req.params.usu_id) : null;
@@ -32,7 +49,7 @@ appUsuario.get("/:usu_id?", limitGrt(), async (req, res) => {
   }
 });
 
-appUsuario.get("/NumMatriMedico/:medico_nroMatricula",limitGrt(),async (req, res) => {
+appUsuario.get("/usuario/NumMatriMedico/:medico_nroMatricula",validarToken,limitGrt(),async (req, res) => {
     if(!req.rateLimit) return; 
     console.log(req.rateLimit);
     const medico_nroMatricula = parseInt(req.params.medico_nroMatricula);
@@ -72,7 +89,7 @@ appUsuario.get("/NumMatriMedico/:medico_nroMatricula",limitGrt(),async (req, res
   }
 );
 
-appUsuario.get("/consultorias/:usu_id", limitGrt(), async (req, res) => {
+appUsuario.get("/usuario/consultorias/:usu_id",validarToken, limitGrt(), async (req, res) => {
   if(!req.rateLimit) return; 
   console.log(req.rateLimit);
   const usu_id = parseInt(req.params.usu_id);
@@ -116,7 +133,7 @@ appUsuario.get("/consultorias/:usu_id", limitGrt(), async (req, res) => {
   }
 });
 
-appUsuario.get("/consultorios-paciente/:usu_id", limitGrt(),async (req, res) => {
+appUsuario.get("/usuario/consultorios-paciente/:usu_id",validarToken, limitGrt(),async (req, res) => {
     if(!req.rateLimit) return; 
     console.log(req.rateLimit);
     const usu_id = parseInt(req.params.usu_id);

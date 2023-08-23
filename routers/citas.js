@@ -1,6 +1,7 @@
 import { con } from "../db/atlas.js";
 import { Router } from "express";
 import { limitGrt } from "../limit/config.js";
+import { validarToken } from '../middlewares/middlewareJWT.js';
 
 const appCitas = Router();
 let db = await con();
@@ -15,7 +16,7 @@ appCitas.get("/",limitGrt(), async (req, res) => {
   res.send(result);
 });
 
-appCitas.get("/fecha/:cit_fecha",limitGrt(), async (req, res) => {
+appCitas.get("/citas/fecha/:cit_fecha",validarToken,limitGrt(), async (req, res) => {
     if(!req.rateLimit) return; 
     console.log(req.rateLimit);
     const cit_fecha = req.params.cit_fecha;
@@ -35,7 +36,7 @@ appCitas.get("/fecha/:cit_fecha",limitGrt(), async (req, res) => {
     }
 });
 
-appCitas.get("/citas-medico/:med_nroMatriculaProfesional/:fecha",limitGrt(), async (req, res) => {
+appCitas.get("/citas/citas-medico/:med_nroMatriculaProfesional/:fecha",validarToken,limitGrt(), async (req, res) => {
     if(!req.rateLimit) return; 
     console.log(req.rateLimit);
     const med_nroMatriculaProfesional = parseInt(req.params.med_nroMatriculaProfesional);
@@ -67,7 +68,7 @@ appCitas.get("/citas-medico/:med_nroMatriculaProfesional/:fecha",limitGrt(), asy
     }
 });
 
-appCitas.get("/citas-por-genero/:gen_id/estado/:estado",limitGrt(), async (req, res) => {
+appCitas.get("/citas/citas-por-genero/:gen_id/estado/:estado",validarToken,limitGrt(), async (req, res) => {
     if(!req.rateLimit) return; 
     console.log(req.rateLimit);
     const gen_id = parseInt(req.params.gen_id);
@@ -111,7 +112,7 @@ appCitas.get("/citas-por-genero/:gen_id/estado/:estado",limitGrt(), async (req, 
     }
 });
 
-appCitas.get("/citas-rechazadas/:estado/:mes",limitGrt(), async (req, res) => {
+appCitas.get("/citas/citas-rechazadas/:estado/:mes",validarToken,limitGrt(), async (req, res) => {
     if(!req.rateLimit) return; 
     console.log(req.rateLimit);
     const estado = req.params.estado;
