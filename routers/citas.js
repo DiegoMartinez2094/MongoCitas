@@ -7,7 +7,7 @@ const appCitas = Router();
 let db = await con();
 let cita = db.collection("cita");
 
-appCitas.get("/",limitGrt(), async (req, res) => {
+appCitas.get("/cita",validarToken,limitGrt(), async (req, res) => {
   if(!req.rateLimit) return; 
   console.log(req.rateLimit);
   let db = await con();
