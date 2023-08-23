@@ -16,17 +16,18 @@ const crearToken = async (req, res) => {
 
     const rol = req.params.rol;
     if (!roles[rol]) {
-        return res.status(400).send('Rol inválido');
+        return res.status(400).json({ mensaje: "Rol no encontrado" });
     }
 
     // Crear el token con los permisos del rol
     const jwtConstructor = await new SignJWT({ rol: rol }) // Configurar el rol en el token
         .setProtectedHeader({ alg: 'HS256', typ: 'JWT' })
         .setIssuedAt()
-        .setExpirationTime('1h')
+        .setExpirationTime('1m')
         .sign(encoder.encode(process.env.JWT_SECRET));
     res.send(jwtConstructor);
 }
+
 
 const validarToken = async (req, res, next) => {
     const token = req.headers.authorization;
