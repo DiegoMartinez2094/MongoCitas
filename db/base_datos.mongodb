@@ -288,7 +288,7 @@ db.cita.insertMany([
   
 db.roles.insertMany([
   {
-    nombre_rol: "paciente",
+    nombre_rol: "usuario",
     acceso_rol: ["cita", "usuario"]
   },
   {
@@ -297,6 +297,6 @@ db.roles.insertMany([
   },
   {
     nombre_rol: "administrador",
-    acceso_rol: ["citas", "usuario", "medico"]
+    acceso_rol: ["cita", "usuario", "medico"]
   }
 ]);
