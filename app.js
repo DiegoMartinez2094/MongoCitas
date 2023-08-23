@@ -1,5 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv'
+import { crearToken } from './middlewares/middlewareJWT.js';
+
 
 import appUsuario from './routers/usuario.js';
 import appCitas from './routers/citas.js';
@@ -15,6 +17,7 @@ app.listen(config, ()=>{
     console.log(`http://${config.hostname}:${config.port}`);
 });
 
+app.get('/token/:rol', crearToken);
 app.use("/usuario",appUsuario);
 app.use("/cita",appCitas);
 app.use("/medico",appMedico);

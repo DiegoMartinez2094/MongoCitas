@@ -273,4 +273,30 @@ db.cita.insertMany([
     }
   ]);
   
-
+  db.createCollection("roles", {
+    validator: {
+      $jsonSchema: {
+        bsonType: "object",
+        required: ["nombre_rol", "acceso_rol"],
+        properties: {
+          nombre_rol: { bsonType: "string" },
+          acceso_rol: { bsonType: "array", items: { bsonType: "string" } }
+        }
+      }
+    }
+  })
+  
+db.roles.insertMany([
+  {
+    nombre_rol: "paciente",
+    acceso_rol: ["cita", "usuario"]
+  },
+  {
+    nombre_rol: "medico",
+    acceso_rol: ["cita", "medico"]
+  },
+  {
+    nombre_rol: "administrador",
+    acceso_rol: ["citas", "usuario", "medico"]
+  }
+]);

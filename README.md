@@ -48,7 +48,10 @@ npm run dev
 
 1. **Obtener todos los pacientes alfabéticamente = http://127.0.0.1:5000/usuario**
 2. **Obtener todas las citas alfabéticamente = http://127.0.0.1:5000/cita**
-3. Obtener todos los médicos de una especialidad específica (por ejemplo, **'Cardiología'**)=http://127.10.10.10:5000/medico/especialidad/Ginecología
+3. Obtener todos los médicos de una especialidad específica (por ejemplo, **'Cardiología'**)=
+   se obtiene el token por rol: http://127.10.10.10:5000/token/medico
+   se pone en los headeres Authorization el token y se realiza la consulta con el siguiente endpoint:
+   http://127.10.10.10:5000/medico/medico/especialidad/Ginecología
 4. Encontrar la próxima cita para un paciente específico (por ejemplo, el paciente con **usu_id 1**)=
 5. Encontrar todos los pacientes que tienen citas con un médico específico (por ejemplo, el médico con **med_nroMatriculaProsional 1**)=http://127.10.10.10:5000/usuario//NumMatriMedico/12345
 6. Obtener las consultorías para un paciente específico (por ejemplo, paciente **con usu_id 1**)=http://127.10.10.10:5000/usuario/consultorias/1

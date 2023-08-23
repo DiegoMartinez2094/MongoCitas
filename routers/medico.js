@@ -1,12 +1,13 @@
 import { con } from "../db/atlas.js";
 import { Router } from "express";
 import { limitGrt } from "../limit/config.js";
+import { validarToken } from '../middlewares/middlewareJWT.js';
 
 const appMedico = Router();
 let db = await con();
 let medico = db.collection("medico");
 
-appMedico.get("/especialidad/:esp_nombre", limitGrt(), async (req, res) => {
+appMedico.get("/medico/especialidad/:esp_nombre", limitGrt(),validarToken, async (req, res) => {
   if (!req.rateLimit) return;
   console.log(req.rateLimit);
   const esp_nombre = req.params.esp_nombre;
